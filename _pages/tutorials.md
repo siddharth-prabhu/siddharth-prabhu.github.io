@@ -1,9 +1,9 @@
 ---
 title: "Tutorials"
-layout: category
+layout: archive
 permalink: /tutorials/
 author_profile: true
-taxonomy: tutorials
+category: tutorials
 entries_layout: list
 show_excerpts: true
 ---
