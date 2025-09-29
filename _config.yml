@@ -9,11 +9,11 @@ minimal_mistakes_skin    : "dark" # "default", "air", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en"
-title                    : "Nora Loose"
+title                    : "Siddharth Prabhu"
 title_separator          : "-"
-name                     : "Nora Loose"
-description              : "Nora Loose's personal website"
-url                      : "https://noraloose.github.io" # should not end with /
+name                     : "Siddharth Prabhu"
+description              : "Siddharth Prabhu's personal website"
+url                      : "https://siddharth-prabhu.github.io" # should not end with /
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -79,11 +79,11 @@ analytics:
 
 # Site Author
 author:
-  name             : "Nora Loose"
+  name             : "Siddharth Prabhu"
   avatar           : "/assets/images/avatar2.JPG" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Global and Regional Ocean Modeling, Machine Learning, Mesoscale Eddy Parameterizations, Scientific Software Development, Adjoint Modeling, Data Assimilation, Uncertainty Quantification"
-  location         : "Boulder, Colorado"
-  email            : "nora@cworthy.org"
+  bio              : "Parameter Estimation, Optimal Control, Machine Learning, Optimization, Automatic Differentiation, System Identification"
+  location         : "Bethlehem, Pennsylvania"
+  email            : "siddharth.prabhu15@gmail.com"
   uri              :
   bitbucket        :
   codepen          :
@@ -91,13 +91,13 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "NoraLoose"
+  github           : "https://github.com/siddharth-prabhu"
   gitlab           :
   google_plus      :
   keybase          :
   instagram        :
   lastfm           :
-  linkedin         : "nora-loose-44a39a96"
+  linkedin         : "https://www.linkedin.com/in/siddharthprabhu15/"
   pinterest        :
   soundcloud       :
   stackoverflow    : # "123456/username" (the last part of your profile url, e.g. https://stackoverflow.com/users/123456/username)
@@ -108,7 +108,7 @@ author:
   weibo            :
   xing             :
   youtube          : # "https://youtube.com/c/MichaelRoseDesign"
-  orcid            : "0000-0002-3684-9634"
+  orcid            : # "0000-0002-3684-9634"
 
 
 # Reading Files
