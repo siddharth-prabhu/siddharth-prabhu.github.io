@@ -3,7 +3,6 @@ title: "Tutorials"
 layout: archive
 permalink: /tutorials/
 author_profile: true
-category: tutorials
 ---
 
 <h2>All posts detected in 'tutorials'</h2>
