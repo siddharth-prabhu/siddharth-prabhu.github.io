@@ -1,6 +1,6 @@
 ---
 title: "Tutorials"
-layout: category
+layout: archive
 permalink: /tutorials/
 author_profile: true
 taxonomy: tutorials
