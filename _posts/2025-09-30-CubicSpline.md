@@ -4,6 +4,7 @@ date: 2025-09-30
 categories: 
   -tutorials
 permalink: /tutorials/CubicSpline/
+use_math: true
 ---
 
 ## 1. Cubic Spline
