@@ -200,7 +200,7 @@ with plt.style.context(["science", "notebook", "bright"]):
     plt.show()
 ```
 
-# <center><a href="/assets/images/LotkaVolterraSimulation.png">![](/assets/images/LotkaVolterraSimulation.png)</a></center>
+<center><a href="/assets/images/LotkaVolterraSimulation.png"><img src="/assets/images/LotkaVolterraSimulation.png"></a></center>
 
 Now that we have generated synthetic data, the following sections will explore different methods for estimating the true parameters from this data.
 
@@ -210,7 +210,7 @@ Probably the most straightforward method is called single-shooting [^2]. In this
 
 If we take a simple examples [^4], as shown in the below figure, you fire the cannon, check if the ball landed at the desired target point, adjust your velocity and repeat. 
 
-# <center><a href="/assets/images/CannonSingleShooting.svg">![](/assets/images/CannonSingleShooting.svg)</a></center>
+<center><a href="/assets/images/CannonSingleShooting.svg"><img src="/assets/images/CannonSingleShooting.svg"></a></center>
 
 $$
 \begin{equation}
@@ -310,7 +310,7 @@ In single-shooting, the parameters are the only decision variables in the optimi
 
 An equivalent example is shown in the figure below. For comparison, the corresponding multiple-shooting optimization problem with only two intervals is also illustrated.
 
-# <center><a href="/assets/images/CannonMultipleShooting.svg">![](/assets/images/CannonMultipleShooting.svg)</a></center>
+<center><a href="/assets/images/CannonMultipleShooting.svg"><img src="/assets/images/CannonMultipleShooting.svg"></a></center>
 
 $$
 \begin{equation}
@@ -430,7 +430,7 @@ $$
 \end{equation}
 $$
 
-# <center> <a href="/assets/images/OrthogonalCollocation.png">![](/assets/images/OrthogonalCollocation.png) </a> </center>
+# <center> <a href="/assets/images/OrthogonalCollocation.png"><img src="/assets/images/OrthogonalCollocation.png"> </a> </center>
 
 where $K$ is the degree of the polynomial with $K + 1$ collocation points, $\tau \in [0, 1]$ is a dimensionless time, $L_j(\tau)$ is the Lagrange basis polynomial such that $L_j(\tau_j) = 1$ and $L_j(\tau_i) = 0$ for all other interpolation points $i \neq j$. The variable $x_i^K$ is the value of the state at the $i$-th interval and the $K$-th collocation point. These values, together with the parameters, are unknown and form the decision variables of the problem. 
 
