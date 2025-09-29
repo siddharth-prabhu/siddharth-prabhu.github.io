@@ -1,8 +1,7 @@
 ---
 title: "Parameter Estimation"
 date: 2025-09-29
-categories: [tutorials]
-permalink: /tutorials/ParameterEstimation/
+categories: tutorials
 ---
 
 ## 1. Parameter Estimation 

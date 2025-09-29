@@ -8,3 +8,4 @@ entries_layout: list
 show_excerpts: true
 ---
 
+Tutorial page
