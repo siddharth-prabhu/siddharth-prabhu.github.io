@@ -1,7 +1,7 @@
 ---
 title: "Parameter estimation of ordinary differential equations using CasADi"
 date: 2025-09-29
-categories: [tutorials]
+categories: tutorials
 use_math: true
 ---
 
@@ -430,7 +430,7 @@ $$
 \end{equation}
 $$
 
-# <center> <a href="/assets/images/OrthogonalCollocation.png"><img src="/assets/images/OrthogonalCollocation.png"> </a> </center>
+<center> <a href="/assets/images/OrthogonalCollocation.png"><img src="/assets/images/OrthogonalCollocation.png"> </a> </center>
 
 where $K$ is the degree of the polynomial with $K + 1$ collocation points, $\tau \in [0, 1]$ is a dimensionless time, $L_j(\tau)$ is the Lagrange basis polynomial such that $L_j(\tau_j) = 1$ and $L_j(\tau_i) = 0$ for all other interpolation points $i \neq j$. The variable $x_i^K$ is the value of the state at the $i$-th interval and the $K$-th collocation point. These values, together with the parameters, are unknown and form the decision variables of the problem. 
 
