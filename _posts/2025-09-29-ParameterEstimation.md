@@ -1,11 +1,11 @@
 ---
 title: "Parameter estimation of ordinary differential equations using CasADi"
 date: 2025-09-29
+layout: archive
 categories: 
   -tutorials
 permalink: /tutorials/ParameterEstimation/
 use_math: true
-classes: wide
 ---
 
 ## 1. Parameter Estimation 
