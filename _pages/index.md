@@ -1,12 +1,10 @@
 ---
-title: ""
+title: "About"
 layout: archive
 sitemap: true
 permalink: /
 author_profile: true
 ---
-
-# About
 
 I am a Ph.D. candidate in Chemical Engineering at Lehigh University, working with [Dr. Kothare](https://engineering.lehigh.edu/faculty/mayuresh-v-kothare) and [Dr. Rangarajan](https://engineering.lehigh.edu/faculty/srinivas-rangarajan). My research has focused on:
 
