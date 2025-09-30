@@ -6,6 +6,10 @@ categories:
   -tutorials
 permalink: /tutorials/ParameterEstimation/
 use_math: true
+toc: true
+toc_label: "Table of Contents"
+toc_icon: "gear"
+toc_sticky: true
 ---
 
 ## 1. Parameter Estimation 
