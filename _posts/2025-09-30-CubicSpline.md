@@ -29,7 +29,7 @@ f(t_{\text{query}}) =
 \end{equation} 
 $$
 
-where $[a_i, \ b_i, \ c_i, \ d_i]_{i = 1}^{n}$ are the coefficients of $[f_i]_{i = 1}^{n}$ polynomial respectively, determined using $n + 1$ measurements $[t_i, \ y_i ]_{i = 1}^{n + 1}$. In this tutorial, we will implement cubic spline interpolation in JAX, ensuring that it is fully differentiable with respect to its arguments
+where $[a_i, \ b_i, \ c_i, \ d_i] _{i = 1}^{n} $ are the coefficients of $[f_i] _{i = 1}^{n}$ polynomial respectively, determined using $n + 1$ measurements $[t_i, \ y_i ] _{i = 1}^{n + 1}$. In this tutorial, we will implement cubic spline interpolation in JAX, ensuring that it is fully differentiable with respect to its arguments
 
 ## 2. Optimal Parameters
 
@@ -275,7 +275,7 @@ def CubicSpline(ti, t, y, method = "jax") :
     )(jnp.atleast_1d(ti), t, popt) 
 ```
 
-Note that this implementation only gives correct gradients for time queries and the measurements $[y_i]_{i = 1}^{n + 1}$ . Gradients with respect to $[t_i]_{i = 1}^{n + 1}$ will be incorrect using this method.
+Note that this implementation only gives correct gradients for time queries and the measurements $[y_i] _{i = 1}^{n + 1} $. Gradients with respect to $[t_i] _{i = 1}^{n + 1} $ will be incorrect using this method.
 
 ```python
 start = time.time()
