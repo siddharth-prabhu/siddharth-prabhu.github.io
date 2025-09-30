@@ -1,83 +1,37 @@
 ---
 title: "Differentiable Cubic Spline Interpolation in JAX"
 date: 2025-09-30
-layout: archive
+layout: single
+classes: wide
 categories: 
   -tutorials
 permalink: /tutorials/CubicSpline/
 use_math: true
+author_profile: false
+toc: true
+toc_label: "Table of Contents"
+toc_icon: "gear"
+toc_sticky: true
 ---
 
-## 1. Cubic Spline
+## 1. Cubic Spline Interpolation
 
-Parameter estimation is a process of finding the optimal parameters of a given model using experimental data. In this tutorial, we will estimate the parameters of an ordinary differential equation (ODE) using three different methods 
-
-- Single shooting (Sequential optimization)
-- Multiple shooting (Simultaneous optimization)
-- Orthogonal Collocation (Simultaneous optimization)
-
-We will implement these methods using CasADi 
-
-## 2. CasADi
-
-CasADi is a open-source python package for automatic differentiation and nonlinear optimization [^1]. A lot of problems including parameter estimation of ODE's can be efficiently solved using CasADi. In this section we will quicklly walk through the basic syntax of CasADi. We begin by importing required packages. 
-
-```python
-import numpy as np
-import casadi as cd 
-import matplotlib.pyplot as plt
-```
-
-CasADi essentially creates symbolic expressions by treating everyting as matrix operation i.e vectors are treated as $n\times1$ matrix and scalar as $1\times1$ matrix. It has two basic data structures
-
-- **The SX symbolics** : used to define matrices where mathematical operations are performed element wise.
-
-    ```python
-    >>> x = cd.SX.sym("x", 2, 2)
-    >>> 2 * x + 1
-    SX(@1=2, @2=1, 
-    [[((@1*x_0)+@2), ((@1*x_2)+@2)], 
-    [((@1*x_1)+@2), ((@1*x_3)+@2)]])
-    ```
-
-- **The MX symbolics** : used to define matrices where mathematical operations are performed over the entire matrix. 
-
-    ```python
-    >>> x = cd.MX.sym("x", 2, 2)
-    >>> 2 * x + 1
-    MX((ones(2x2)+(2.*x)))
-    ```
-
-Once symbolic variables are defined, you can create mathematical expressions directly using CasADi primitives:
-
-- **Mathematical operations** such as addition (`x + x`), multiplication (`x * x`), trignometric functions (`cd.sin(x)`), matrix multiplications (`cd.mtimes(x, x)`)
-- **Linear algebra** such as solving linear systems (`cd.solve(A, b)`), root finding problem (`cd.rootfinder(g)`)
-- **Control flow** such as if-else statements (`cd.if_else(*args)`)
-- **Automatic differentiation** using forward (Jacobian-vector-product) and reverse mode (vector-Jacobian-product) (`cd.jacobian(A@x, x)`)
-
-Using these mathematical expressions, CasADi can also be used for optimization. Lets look at the CasADi syntax for solving a simple optimization problem given below using the `cd.Opti` optimization helper class
+Cubic splines are an interpolation method that construct a smooth curve by joining together cubic polynomials between data points. More precisely, the interpolant is defined as a piecewise cubic polynomial $ f :[t_1, t_{n + 1}] \to \mathbb{R}$ defined as 
 
 $$
 \begin{equation}
-\begin{aligned}
-    & \min _{p_1, \ p_2} \ \ (p_1 - 1)^2 + (p_2 - 2)^2 \\ 
-    \text{subject to} & \\
-    & p_1 \geq 2
-\end{aligned}
-\end{equation}
+f(t_{\text{query}}) =
+\begin{cases}
+  a_1t^3 + b_1t^2 + c_1t + d_1, & \text{if}\ t_{\text{query}} \in [t_1, t_2] \\
+  a_2t^3 + b_2t^2 + c_2t + d_2, & \text{if}\ t_{\text{query}} \in (t_2, t_3] \\
+  \qquad \qquad \quad \vdots \\
+  a_nt^3 + b_nt^2 + c_nt + d_n, & \text{if}\ t_{\text{query}} \in (t_n, t_{n + 1}] \\
+\end{cases}
+\end{equation} 
 $$
 
-```python
-opti = cd.Opti() # Initialize CasADi optimization helper class
-p = opti.variable(2) # Define decision variables
+where $\{a_i, \ b_i, \ c_i, \ d_i\}_{i = 1}^{n}$ are the coefficients of $n$ pieciwise polynomials, determined using $n + 1$ measurements $\{t_i, \ f(t_i)\}_{i = 1}^{n + 1}$. In this tutorial, n this tutorial, we will implement cubic spline interpolation in JAX, ensuring that it is fully differentiable with respect to its arguments
 
-opti.minimize((p[0] - 1)**2 + (p[1] - 2)**2) # Define objective function
-opti.subject_to(p[0] >= 2) # Define constraints
-opti.set_initial(p, np.array([0, 0])) # Define initial conditions
+## 2. Optimal Parameters
 
-plugin_options = {} # Plugin options
-solver_options = {"max_iter" : 100, "tol" : 1e-5} # solver options
-opti.solver("ipopt", plugin_options, solver_options) # Initialize optimization solver
-optimal = opti.solve() # Solve the problem
-print("Optimal Parameters : ", optimal.value(p)) # Get the optimal parameters
-```
+## 3. 

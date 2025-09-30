@@ -7,6 +7,7 @@ categories:
   -tutorials
 permalink: /tutorials/ParameterEstimation/
 use_math: true
+author_profile: false
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "gear"
@@ -210,6 +211,7 @@ with plt.style.context(["science", "notebook", "bright"]):
 
 <center><a href="/assets/images/LotkaVolterraSimulation.png"><img src="/assets/images/LotkaVolterraSimulation.png"></a></center>
 
+
 Now that we have generated synthetic data, the following sections will explore different methods for estimating the true parameters from this data.
 
 ## 4. Single Shooting
@@ -246,7 +248,7 @@ opti.solver("ipopt", plugin_options, solver_options)
 optimal = opti.solve()
 ```
 
-And that all !
+And that's all !
 
 ```bash
 This is Ipopt version 3.12.3, running with linear solver mumps.
@@ -442,30 +444,30 @@ $$
 
 where $K$ is the degree of the polynomial with $K + 1$ collocation points, $\tau \in [0, 1]$ is a dimensionless time, $L_j(\tau)$ is the Lagrange basis polynomial such that $L_j(\tau_j) = 1$ and $L_j(\tau_i) = 0$ for all other interpolation points $i \neq j$. The variable $x_i^K$ is the value of the state at the $i$-th interval and the $K$-th collocation point. These values, together with the parameters, are unknown and form the decision variables of the problem. 
 
-### Dynamic/Collocation Constraints
+- Dynamic/Collocation Constraints
 
-Once you have the interpolating polynomial for the states, the dynamic equation can be used to incorporate constriants. Specifically, the time derivatives from the polynomial approximation evaluated at the collocation points must be equal to the dynamic equation at the same points. 
+  Once you have the interpolating polynomial for the states, the dynamic equation can be used to incorporate constriants. Specifically, the time derivatives from the polynomial approximation evaluated at the collocation points must be equal to the dynamic equation at the same points. 
 
-$$
-\begin{equation}
-\begin{aligned}
-    \frac{dx_i^K}{dt} \Bigg|_{t_{i, k}} & = f(x_{i, k}, p), \quad \forall \ k \in [1, \cdots, K] \\
-    \text{where} \quad \frac{dx_i^K}{dt} \Bigg|_{t_{i, k}} & = \sum _{j = 0}^K \frac{x_{i, j}}{t_{i + 1} - t_i}\underbrace{\frac{dL_j}{d\tau}}_{\text{precomputed}}
-\end{aligned}
-\end{equation}
-$$
+  $$
+  \begin{equation}
+  \begin{aligned}
+      \frac{dx_i^K}{dt} \Bigg|_{t_{i, k}} & = f(x_{i, k}, p), \quad \forall \ k \in [1, \cdots, K] \\
+      \text{where} \quad \frac{dx_i^K}{dt} \Bigg|_{t_{i, k}} & = \sum _{j = 0}^K \frac{x_{i, j}}{t_{i + 1} - t_i}\underbrace{\frac{dL_j}{d\tau}}_{\text{precomputed}}
+  \end{aligned}
+  \end{equation}
+  $$
 
-### Continuity Constraints
+- Continuity Constraints
 
-Additional constraints are incorporated to ensure conitnuity between the finite elements. Just as we did in multiple-shooting, this can be achieved by simply enforcing equality constraints between the initial state of an interval and the final evaluated state from the previous interval. 
+  Additional constraints are incorporated to ensure conitnuity between the finite elements. Just as we did in multiple-shooting, this can be achieved by simply enforcing equality constraints between the initial state of an interval and the final evaluated state from the previous interval. 
 
-$$
-\begin{equation}
-\begin{aligned}
-    x_{i + 1, 0} = \sum _{j = 0}^K L_j(\tau = 1)x_{i, j}
-\end{aligned}
-\end{equation}
-$$
+  $$
+  \begin{equation}
+  \begin{aligned}
+      x_{i + 1, 0} = \sum _{j = 0}^K L_j(\tau = 1)x_{i, j}
+  \end{aligned}
+  \end{equation}
+  $$
 
 To summarize, we transformed the original optimization problem involving an integral into one with only algebraic objectives, equality constraints, and inequality constraints. However, this comes at the cost of increasing the number of decision variables: in addition to the parameters, the states at each collocation point must also be optimized. For long trajectories, higher-degree collocation polynomials, multiple initial conditions, or high-dimensional state spaces, solving such a problem directly becomes infeasible without exploiting sparsity. Fortunately, CasADi manages this automatically behind the scenes, making the overall optimization problem tractable.
 
