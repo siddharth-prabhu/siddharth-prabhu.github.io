@@ -5,6 +5,7 @@ categories:
   -tutorials
 permalink: /tutorials/ParameterEstimation/
 use_math: true
+classes: wide
 ---
 
 ## 1. Parameter Estimation 
