@@ -15,13 +15,11 @@ toc_sticky: true
 
 ## Table of Contents
 
-<center>
-|1| [Cubic Spline Interpolation](#1-cubic-spline-interpolation) |
-|2| [Optimal Parameters](#2-optimal-parameters) |
-|3| [JAX Implementation](#3-jax-implemention)|
-|4| [Evaluation and Gradient Computation](#4-evaluation-and-gradient-computation)|
-|5| [Efficient Implementation](#5-efficient-implementation)|
-</center>
+1. [Cubic Spline Interpolation](#1-cubic-spline-interpolation)
+2. [Optimal Parameters](#2-optimal-parameters)
+3. [JAX Implementation](#3-jax-implemention)
+4. [Evaluation and Gradient Computation](#4-evaluation-and-gradient-computation)
+5. [Efficient Implementation](#5-efficient-implementation)
 ---
 
 

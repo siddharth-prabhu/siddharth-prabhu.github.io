@@ -13,6 +13,17 @@ toc_icon: "gear"
 toc_sticky: true
 ---
 
+## Table of Contents
+
+1. [Parameter Estimation](#1-parameter-estimation)
+2. [CasADi](#2-casadi)
+3. [Forward Simulation](#3-forward-simulation)
+4. [Single Shooting](#4-single-shooting)
+5. [Multiple Shooting](#5-multiple-shooting)
+5. [Orthogonal Collocation](#6-orthogonal-collocation)
+5. [References](#7-references)
+
+
 ## 1. Parameter Estimation 
 
 Parameter estimation is a process of finding the optimal parameters of a given model using experimental data. In this tutorial, we will estimate the parameters of an ordinary differential equation (ODE) using three different methods 
