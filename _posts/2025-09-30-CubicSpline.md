@@ -13,6 +13,18 @@ toc_icon: "gear"
 toc_sticky: true
 ---
 
+## Table of Contents
+
+<center>
+|1| [Cubic Spline Interpolation](#1-cubic-spline-interpolation) |
+|2| [Optimal Parameters](#2-optimal-parameters) |
+|3| [JAX Implementation](#3-jax-implemention)|
+|4| [Evaluation and Gradient Computation](#4-evaluation-and-gradient-computation)|
+|5| [Efficient Implementation](#5-efficient-implementation)|
+</center>
+---
+
+
 ## 1. Cubic Spline Interpolation
 
 Cubic splines are an interpolation method that construct a smooth curve by joining together cubic polynomials between data points [^1]. More precisely, the interpolant is defined as a piecewise cubic polynomial $ f :[t_1, t_{n + 1}] \to \mathbb{R}$ defined as 
