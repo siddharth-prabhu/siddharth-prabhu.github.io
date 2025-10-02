@@ -20,7 +20,6 @@ toc_sticky: true
 3. [JAX Implementation](#3-jax-implemention)
 4. [Evaluation and Gradient Computation](#4-evaluation-and-gradient-computation)
 5. [Efficient Implementation](#5-efficient-implementation)
----
 
 
 ## 1. Cubic Spline Interpolation
