@@ -1,6 +1,6 @@
 ---
 title: "Tutorials"
-layout: category
+layout: single
 taxonomy: tutorials
 permalink: /tutorials/
 author_profile: true
@@ -12,3 +12,13 @@ author_profile: true
 - <a href="{{page.url}}ODEvent/"> Sensitivity Analysis of Hybrid Dynamical Systems </a>
 - <a href=""> Condensing Approach to Parameter Estimation in JAX </a>
 
+{% assign tutorials = site.categories.tutorials %}
+{% if tutorials.size > 0 %}
+  <div class="entries-list">
+    {% for post in tutorials %}
+      {% include archive-single.html type="post" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No posts found in the <code>tutorial</code> category.</p>
+{% endif %}
