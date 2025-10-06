@@ -1,6 +1,6 @@
 ---
 title: "Tutorials"
-layout: archive
+layout: single
 permalink: /tutorials/
 author_profile: true
 toc: true
