@@ -4,6 +4,7 @@ date: 2025-09-29
 layout: archive
 categories: [tutorials]
 permalink: /tutorials/ParameterEstimation/
+intro : "This tutorial explains three different parameter estimation methods: single shooting, multiple shooting, and orthogonal collocation. We will walk through a simple example and implement it in CasADi."
 use_math: true
 author_profile: true
 toc: false
@@ -11,6 +12,8 @@ toc_label: "Table of Contents"
 toc_icon: "gear"
 toc_sticky: true
 ---
+
+<!--more-->
 
 ## Table of Contents
 
@@ -22,7 +25,6 @@ toc_sticky: true
 5. [Orthogonal Collocation](#6-orthogonal-collocation)
 5. [References](#7-references)
 
-<!--more-->
 
 ## 1. Parameter Estimation 
 

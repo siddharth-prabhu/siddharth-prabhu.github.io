@@ -4,7 +4,7 @@ date: 2025-09-30
 layout: archive
 categories: [tutorials]
 permalink: /tutorials/CubicSpline/
-intro : "This tutorial"
+intro : "This tutorial introduces differentiable cubic spline interpolation in JAX. We will begin with a basic implementation and then enhance its computational performance by leveraging sparsity."
 use_math: true
 author_profile: true
 toc: false
@@ -12,6 +12,8 @@ toc_label: "Table of Contents"
 toc_icon: "gear"
 toc_sticky: true
 ---
+
+<!--more-->
 
 ## Table of Contents
 
