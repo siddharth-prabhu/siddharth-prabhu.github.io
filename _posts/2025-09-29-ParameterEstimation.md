@@ -22,6 +22,7 @@ toc_sticky: true
 5. [Orthogonal Collocation](#6-orthogonal-collocation)
 5. [References](#7-references)
 
+<!--more-->
 
 ## 1. Parameter Estimation 
 

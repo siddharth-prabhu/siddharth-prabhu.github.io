@@ -3,19 +3,20 @@ title: "Tutorials"
 layout: single
 permalink: /tutorials/
 author_profile: true
+toc: false
+toc_label: "Table of Contents"
+toc_icon: "gear"
+toc_sticky: true
 ---
 
-- <a href="{{page.url}}ParameterEstimation/"> Parameter estimation of ordinary differential equations using CasADi </a>
-- <a href="{{page.url}}CubicSpline/"> Differentiable Cubic Spline Interpolation in JAX </a>
-- <a href="{{page.url}}DOpti/"> Differentiable Optimization in JAX </a>
-- <a href="{{page.url}}ODEvent/"> Sensitivity Analysis of Hybrid Dynamical Systems </a>
-- <a href=""> Condensing Approach to Parameter Estimation in JAX </a>
-
-{% assign tutorials = site.categories.tutorials %}
+{% assign tutorials = site.categories.tutorials | sort: "date" | reverse %}
 {% if tutorials.size > 0 %}
   <div class="entries-list">
     {% for post in tutorials %}
       {% include archive-single.html type="post" %}
+      {% if post.excerpt %}
+        <p class="tutorial-intro">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+      {% endif %}
     {% endfor %}
   </div>
 {% else %}
