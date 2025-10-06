@@ -1,9 +1,10 @@
 ---
 title: "Tutorials"
 layout: single
+classes: wide
 permalink: /tutorials/
 author_profile: true
-toc: true
+toc: False
 toc_label: "Table of Contents"
 toc_icon: "gear"
 toc_sticky: true
