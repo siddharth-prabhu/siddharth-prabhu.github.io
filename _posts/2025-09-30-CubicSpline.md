@@ -2,8 +2,7 @@
 title: "Differentiable Cubic Spline Interpolation in JAX"
 date: 2025-09-30
 layout: archive
-categories: 
-  -tutorials
+categories: [tutorials]
 permalink: /tutorials/CubicSpline/
 use_math: true
 author_profile: true

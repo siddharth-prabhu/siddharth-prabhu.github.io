@@ -1,7 +1,6 @@
 ---
 title: "Tutorials"
 layout: single
-taxonomy: tutorials
 permalink: /tutorials/
 author_profile: true
 ---
