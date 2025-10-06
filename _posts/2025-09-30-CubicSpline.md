@@ -4,6 +4,7 @@ date: 2025-09-30
 layout: archive
 categories: [tutorials]
 permalink: /tutorials/CubicSpline/
+intro : "This tutorial"
 use_math: true
 author_profile: true
 toc: false
@@ -20,7 +21,6 @@ toc_sticky: true
 4. [Evaluation and Gradient Computation](#4-evaluation-and-gradient-computation)
 5. [Efficient Implementation](#5-efficient-implementation)
 
-<!--more-->
 
 ## 1. Cubic Spline Interpolation
 
