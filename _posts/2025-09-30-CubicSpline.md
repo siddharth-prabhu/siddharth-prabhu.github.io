@@ -82,7 +82,15 @@ $$
 \end{equation} 
 $$
 
-With these $4n$ equations — consisting of $2n$ evaluation constraints, $2(n−1)$ smoothness conditions, and $2$ boundary conditions — we have exactly enough to solve for the $4n$ unknown parameters. These parameters can be obtained by solving a linear system of equations. Let us now implement this procedure in JAX.
+With these $4n$ equations — consisting of $2n$ evaluation constraints, $2(n−1)$ smoothness conditions, and $2$ boundary conditions — we have exactly enough to solve for the $4n$ unknown parameters. These parameters can be obtained by solving a linear system of equations, which is given as follows. 
+
+$$
+\begin{equation}
+A(t)p = b(y)
+\end{equation} 
+$$
+
+where $p \in \mathbb{R}^{4n}$ are all the parameters of the polynomials, $A(t) \in \mathbb{R}^{4n}$ is a matrix of coefficients corresponding to these parameters and $b(y) \in \mathbb{R}^{4n}$ is a vector of measurements and zeros. Let us now implement this procedure in JAX.
 
 ## 3. JAX Implemention
 
@@ -220,16 +228,176 @@ True
 
 ## 5. Efficient Implementation
 
-When comparing execution times with npoints = 100, which is a typical scale in many scientific applications, we observe a substantial difference between our JAX implementation and SciPy’s implementation. The resulting times are as follows :
+When comparing execution times with `npoints = 5000`, which is a typical scale in many scientific applications, we observe a substantial difference between our JAX implementation and SciPy’s implementation. The resulting times are as follows :
 
 ```python
-JAX Cubic spline (jinterp):  0.38259243965148926 sec
-Scipy Cubic spline (sinterp):  0.0015339851379394531 sec
+Simulate using JAX :  20.629136323928833 sec
+Simulate using Scipy Cubic spline :  0.0026857852935791016 sec
 ```
 
-The reason for this discrepancy is that our JAX implementation relies on jnp.linalg.solve to handle a dense linear system, whereas SciPy takes advantage of the tridiagonal structure of the system, leading to a much faster computation. In this section, we will incorporate SciPy’s optimized approach into our workflow while keeping the process differentiable.
+This discrepancy arises from two main factors. First, our JAX implementation constructs the matrix $A$ to be inverted by applying the function `hvp` to the identity matrix, since the function directly returns $Ax$ rather than $A$ itself. Second, we use `jnp.linalg.solve` to solve a dense linear system, whereas SciPy exploits the tridiagonal structure of the system, enabling much faster computations.
 
-JAX provides a convenient function, `jax.pure_callback`, which allows us to incorporate external functions that are not written in pure JAX [^2]. In addition, we need to define custom gradient rules for these external functions to ensure they remain differentiable within JAX’s computation graph [^3]. 
+In this section, we will first use a sparse matrix solver and then integrate SciPy’s optimized approach into our workflow while ensuring the entire process remains differentiable. Instead of reimplementing everything in JAX, we can use the convenient `jax.pure_callback`, function, which allows us to incorporate external functions that are not written purely in JAX [^2]. However, to maintain differentiability, we must define custom gradient rules for these external functions so they remain compatible with JAX’s computation graph. [^3]. 
+
+Instead of computing the entire matrix using the `hvp` function as we did before, we will now only store the nonzero elements of this matrix $A$ denoted by its row index, column index and values. Using `jax.pure_callback`, we will then form a sparse matrix and solve the linear system of equations. We also define a custom reverse-mode differentiation rule using `jax.custom_vjp`. Note that this implementation only gives correct gradients for time queries and the measurements $[y_i] _{i = 1}^{n + 1} $. Gradients with respect to $[t_i] _{i = 1}^{n + 1} $ are not implemented. The reverse-mode differentiation rule is as follows 
+
+
+$$
+\begin{equation}
+\begin{aligned}
+    p & = A^{-1}b \\
+    v^T \partial p & = v^T A^{-1} \partial b \\
+    \text{If} \quad w^T & = v^T A^{-1} \quad \text{then} \quad v^T \partial p = w^T \partial b \\
+    w & = A^{T^{-1}} v \rightarrow \quad \text{Cubic Spline Solve with matrix transpose}
+\end{aligned}
+\end{equation}
+$$
+
+
+```python
+@partial(jax.custom_vjp, nondiff_argnums = (4, ))
+def SparseLinearSolve(rows, cols, values, b, transpose = False):
+    # A is non differentiable
+    def _spsolve(rows, cols, values, b):
+        A = sparse.csr_matrix((values, (rows, cols)), shape = (len(b), len(b)))
+        return sparse.linalg.spsolve(A.T, b) if transpose else sparse.linalg.spsolve(A, b)
+
+    return jax.pure_callback(_spsolve, jax.ShapeDtypeStruct(b.shape, b.dtype), rows, cols, values, b)
+    
+def SparseLinearSolve_fwd(rows, cols, values, b, transpose):
+    p = SparseLinearSolve(rows, cols, values, b, transpose)
+    return p, (rows, cols, values, b)
+
+def SparseLinearSolve_bwd(transpose, res, gdot):
+    rows, cols, values, b = res
+    return None, None, None, SparseLinearSolve(rows, cols, values, gdot, transpose)
+
+SparseLinearSolve.defvjp(SparseLinearSolve_fwd, SparseLinearSolve_bwd)
+
+
+def CubicSplineParametersSparse(t, y) : 
+    # Gives the optimal values of parameters of cubic polynomial given time range t and function values y
+    
+    npoints = len(t)
+    cubic_poly = lambda t, tj : jnp.array([(t - tj)**3, (t - tj)**2, (t - tj), 1.])
+    _f = jax.vmap(cubic_poly) # polynomial evaluation
+    _jac = jax.vmap(lambda t, tj : jnp.array([3*(t - tj)**2, 2*(t - tj), 1, 0])) # first-order derivative w.r.t time
+    _hess = jax.vmap(lambda t, tj : jnp.array([6*(t - tj), 2, 0, 0.])) # second-order derivative w.r.t time
+    _ghess = jax.vmap(lambda t, tj : jnp.array([6, 0, 0, 0.])) # third-order derivative w.r.t time
+
+    rows = jnp.arange(npoints - 1)
+    cols = jnp.arange(4 * (npoints - 1)).reshape(-1, 4)
+    A = jnp.zeros(shape = (4 * (npoints - 1), 4 * (npoints - 1)))
+
+    rows = jnp.concatenate((
+        rows, 
+        rows + (npoints - 1),
+        rows[:-1] + 2 * (npoints - 1),
+        rows[:-1] + 2 * (npoints - 1),
+        rows[:-1] + 3 * (npoints - 1) - 1,
+        rows[:-1] + 3 * (npoints - 1) - 1, 
+        4 * (rows[-1:] + 1) - 2,
+        4 * (rows[-1:] + 1) - 2,
+        4 * (rows[-1:] + 1) - 1,
+        4 * (rows[-1:] + 1) - 1 
+    )).reshape(-1, 1)
+
+    cols = jnp.vstack([
+        cols, 
+        cols, 
+        cols[:-1], #(1)
+        cols[1:], #(1)
+        cols[:-1], #(2)
+        cols[1:], #(2)
+        cols[:1], #(3)
+        cols[1:2], #(3)
+        cols[-2:-1], #(4)
+        cols[-1:] #(4)
+    ])
+
+    _rows, _cols = jnp.vstack(jax.vmap(lambda r, c : jnp.asarray(jnp.meshgrid(r, c)).T.reshape(-1, 2))(rows, cols)).T
+
+    values = jnp.vstack(( 
+        _f(t[:-1], t[:-1]), 
+        _f(t[1:], t[:-1]), 
+        _jac(t[1:-1], t[:-2]), 
+        - _jac(t[1:-1], t[1:-1]), 
+        _hess(t[1:-1], t[:-2]), 
+        - _hess(t[1:-1], t[1:-1]),
+        _ghess(t[1:2], t[:1]), 
+        - _ghess(t[1:2], t[1:2]),
+        _ghess(t[-2:-1], t[-3:-2]), 
+        - _ghess(t[-2:-1], t[-2:-1])
+    )).flatten()
+
+    y = jnp.atleast_2d(y) # shape (n, ny)
+    return SparseLinearSolve(
+        _rows, _cols, values, 
+        jnp.concatenate((y[:-1], y[1:], jnp.zeros(shape = (2 * npoints - 2, y.shape[-1]))))
+    ) # shape (4 * (n - 1), ny)
+
+@partial(jax.jit, static_argnums = (3, ))
+def CubicSpline(ti : jnp.ndarray, t : jnp.ndarray, y : jnp.ndarray, method : str = "jax") -> jnp.ndarray :
+    # https://sites.millersville.edu/rbuchanan/math375/CubicSpline.pdf
+    # Fully differentiable Cubic Spline Interpolation
+    # Given measurements y at time points t. The time arguments are ti
+    _y = y if y.ndim == 2 else y[:, jnp.newaxis] # makes sure that array is 2D. 
+    
+    if method == "jax" : 
+        popt = CubicSplineParameters(t, _y) # JAX + dense matrix inverse
+    elif method == "sparse" :
+        popt = CubicSplineParametersSparse(t, _y) # JAX + sparse matrix inverse
+    else : 
+        assert False, "Method not implemented"
+    
+    return jax.vmap(
+        jax.vmap(CubicSplineSimulate, in_axes = (None, None, 1)), 
+        in_axes = (0, None, None)
+    )(jnp.atleast_1d(ti), t, popt) 
+```
+
+Lets compare the performance of this approach with our earlier approach
+
+```python
+start = time.time()
+_ = jax.block_until_ready(CubicSpline(targ, t, y, "sparse"))
+end = time.time()
+print("Simulate using spsolve :", end - start)
+
+start = time.time()
+_ = jax.block_until_ready(CubicSpline(targ, t, y))
+end = time.time()
+print("Simulate using JAX :", end - start)
+
+start = time.time()
+loss, (tidot, ydot) = jax.block_until_ready(jax.value_and_grad(obj, argnums = (0, 2))(targ, t, y, "sparse"))
+end = time.time()
+print("Gradients (reverse mode) using Spsolve", end - start)
+
+start = time.time()
+loss, (tidot, ydot) = jax.block_until_ready(jax.value_and_grad(obj, argnums = (0, 2))(targ, t, y))
+end = time.time()
+print("Gradients (reverse mode) using JAX", end - start)
+```
+
+```python
+Simulate using spsolve : 0.12991094589233398 sec
+Simulate using JAX : 20.629136323928833 sec
+Simulate using Scipy Cubic spline :  0.0026857852935791016 sec
+Gradients (reverse mode) using Spsolve 10.910008668899536 sec
+Gradients (reverse mode) using JAX 35.83856439590454 sec
+```
+
+We observe that our current approach is significantly faster than the previous one; however, it is still not as fast as the pure SciPy implementation. While we can implement the SciPy version using `jax.pure_callback`, we cannot define a custom VJP rule in this case, since we do not have access to the matrix or its inverse/decomposition. Doing so makes the differentiation rule linear in the (co-)tangent space, allowing a custom JVP rule to suffice. 
+
+$$
+\begin{equation}
+\begin{aligned}
+    p & = A^{-1}b \\
+    \partial p \ v & = A^{-1} \partial b \ v \\
+\end{aligned}
+\end{equation}
+$$
 
 
 ```python
@@ -251,11 +419,6 @@ def CubicSplineParametersScipy_fwd(primals, tangents):
     _, ydot = tangents
     n, ny = y.shape
 
-    # This implementation is not linear in the tangent space. 
-    # Therefore only jvp's can be computed
-    # p = CubicSplineParametersScipy(t, y)
-    # p_out = CubicSplineParametersScipy(t, ydot)
-
     # This impelmentation makes the function linear in tangent space.
     # Therefore both jvp's and vjp's can be computed
     p, AinvI = jnp.array_split(
@@ -272,62 +435,73 @@ def CubicSplineParametersScipy_fwd(primals, tangents):
 We then edit the `CubicSpline` function to account for this change 
 
 ```python
-@functools.partial(jax.jit, static_argnums = (3, ))
-def CubicSpline(ti, t, y, method = "jax") :
+@partial(jax.jit, static_argnums = (3, ))
+def CubicSpline(ti : jnp.ndarray, t : jnp.ndarray, y : jnp.ndarray, method : str = "jax") -> jnp.ndarray :
+    # https://sites.millersville.edu/rbuchanan/math375/CubicSpline.pdf
     # Fully differentiable Cubic Spline Interpolation
     # Given measurements y at time points t. The time arguments are ti
     _y = y if y.ndim == 2 else y[:, jnp.newaxis] # makes sure that array is 2D. 
-    popt = CubicSplineParameters(t, _y) if method == "jax" else CubicSplineParametersScipy(t, _y)
+    
+    if method == "jax" : 
+        popt = CubicSplineParameters(t, _y) # JAX + dense matrix inverse
+    elif method == "sparse" :
+        popt = CubicSplineParametersSparse(t, _y) # JAX + sparse matrix inverse
+    else : 
+        popt = CubicSplineParametersScipy(t, _y) # JAX + scipy
+    
     return jax.vmap(
         jax.vmap(CubicSplineSimulate, in_axes = (None, None, 1)), 
         in_axes = (0, None, None)
     )(jnp.atleast_1d(ti), t, popt) 
 ```
 
-Note that this implementation only gives correct gradients for time queries and the measurements $[y_i] _{i = 1}^{n + 1} $. Gradients with respect to $[t_i] _{i = 1}^{n + 1} $ will be incorrect using this method.
+Comparing its performance with the rest of the approaches. 
+
 
 ```python
 start = time.time()
-jax.block_until_ready(jax.jacfwd(obj, argnums = (0, 2))(targ, t, y, "scipy"))
+_ = jax.block_until_ready(CubicSpline(targ, t, y, "scipy"))
 end = time.time()
-print("Gradients (forward mode) using callback :", end - start, "sec")
-
-start = time.time()
-jax.block_until_ready(jax.jacfwd(obj, argnums = (0, 2))(targ, t, y))
-end = time.time()
-print("Gradients (forward mode) using JAX :", end - start, "sec")
+print("Simulate using SciPy callback :", end - start)
 
 start = time.time()
 jax.block_until_ready(jax.value_and_grad(obj, argnums = (0, 2))(targ, t, y, "scipy"))
 end = time.time()
-print("Gradients (reverse mode) using callback", end - start, "sec")
-
-start = time.time()
-jax.block_until_ready(jax.value_and_grad(obj, argnums = (0, 2))(targ, t, y))
-end = time.time()
-print("Gradients (reverse mode) using JAX", end - start, "sec")
-
-start = time.time()
-jax.block_until_ready(jax.hessian(obj, argnums = (0, 2))(targ, t, y, "scipy"))
-end = time.time()
-print("Hessian (fwd-rev mode) using callback", end - start, "sec")
-
-start = time.time()
-jax.block_until_ready(jax.hessian(obj, argnums = (0, 2))(targ, t, y))
-end = time.time()
-print("Hessian (fwd-rev mode) using JAX", end - start, "sec")
+print("Gradients (reverse mode) using SciPy callback", end - start, "sec")
 ```
 
 ```python
-Gradients (forward mode) using callback : 1.0925776958465576 sec
-Gradients (forward mode) using JAX : 1.1279046535491943 sec
-Gradients (reverse mode) using callback 0.5884313583374023 sec
-Gradients (reverse mode) using JAX 0.9264490604400635 sec
-Hessian (fwd-rev mode) using callback 1.9281635284423828 sec
-Hessian (fwd-rev mode) using JAX 1.6729705333709717 sec
+Simulate using scipy callback : 0.11706137657165527 sec
+Gradients (reverse mode) using SciPy callback 13.912312746047974 sec
 ```
 
-Note that we use `npoints = 100` for the above computations. Although the forward evaluation is now orders of magnitude faster, the time required to compute gradients has improved only marginally. This slowdown occurs because, in our custom-JVP implementation, we do not have access to the original matrix factorization. As a result we are forced to form (or implicitly apply) the matrix inverse — effectively multiplying the function by the identity to obtain an inverse — and then multiply that inverse by a vector, rather than solving a linear system directly.
+We observe that this approach still performs better than our initial method, where we solved a dense linear system, and performs comparably to our sparse linear system approach. However, it does not perform as well as the SciPy implementation, likely due to the additional overhead costs in JAX. A major advantage of this method is that it enables efficient computation of higher-order derivatives. For instance, the Hessian can be computed using forward-over-reverse mode, whereas in the previous approach it could only be obtained using the less efficient reverse-over-reverse mode.
+
+```python
+start = time.time()
+tidot, ydot = jax.block_until_ready(jax.hessian(obj, argnums = (0, 2))(targ, t, y, "scipy"))
+end = time.time()
+print("Hessian (fwd-rev mode) using SciPy callback", end - start)
+
+start = time.time()
+tidot, ydot = jax.block_until_ready(jax.hessian(obj, argnums = (0, 2))(targ, t, y))
+end = time.time()
+print("Hessian (fwd-rev mode) using JAX", end - start)
+
+start = time.time()
+tidot, ydot = jax.block_until_ready(jax.jacrev(jax.jacrev(obj, argnums = (0, 2)), argnums = (0, 2))(targ, t, y))
+end = time.time()
+print("Hessian (rev-rev mode) using Spsolve", end - start)
+```
+
+```python
+Hessian (fwd-rev mode) using SciPy callback 20.535470724105835 sec
+Hessian (fwd-rev mode) using JAX 10.610387802124023 sec
+Hessian (rev-rev mode) using Spsolve 13.807488918304443 sec
+```
+
+Note that we use `npoints = 500` in our Hessian computations to manage computational and memory constraints. We observe that although our latest approach enables forward-over-reverse computation of the Hessian, it remains computationally expensive because the inverse is computed within the differentiation rule. Interestingly, our original JAX implementation turns out to be faster.
+
 
 ## 6. References 
 
