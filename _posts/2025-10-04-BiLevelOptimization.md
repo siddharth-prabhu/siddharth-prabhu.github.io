@@ -19,12 +19,12 @@ toc_sticky: true
 
 1. [Introduction](#1-introduction) 
 2. [Method](#2-method)
-    2.1 [Derivatives of Inner Optimization Problem](#21-derivatives-of-inner-optimization-problem)
-    2.2 [Derivatives of Outer Optimization Problem](#22-derivatives-of-outer-opitmization-problem)
-    2.3 [Derivatives of Ordinary Differential Equations](#23-derivatives-of-ordinary-differential-equations)
+    1. [Derivatives of Inner Optimization Problem](#21-derivatives-of-inner-optimization-problem)
+    2. [Derivatives of Outer Optimization Problem](#22-derivatives-of-outer-opitmization-problem)
+    3. [Derivatives of Ordinary Differential Equations](#23-derivatives-of-ordinary-differential-equations)
 3. [Examples](#3-examples)
-    3.1 [Parameter Estimation (Fully Observed States)](#31-parameter-estimation-fully-observed-states)
-    3.2 [Parameter Estimation (Partially Observed States)](#32-parameter-estimation-partially-observed-states)
+    1. [Parameter Estimation (Fully Observed States)](#31-parameter-estimation-fully-observed-states)
+    2. [Parameter Estimation (Partially Observed States)](#32-parameter-estimation-partially-observed-states)
 4. [Conclusion](#4-conclusion)
 5. [References](#5-references)
 
@@ -209,7 +209,7 @@ Finally, we return the sensitivity vector $w$
 
 ### 2.2 Derivatives of Outer Opitmization Problem
 
-We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active, i.e. $h(p^{\ast} | \phi) \neq 0 $ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
+We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active $ (h(p^{\ast} | \phi) \neq 0) $ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
 
 $$
 \begin{equation}
