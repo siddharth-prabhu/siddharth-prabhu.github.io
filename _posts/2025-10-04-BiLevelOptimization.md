@@ -17,10 +17,16 @@ toc_sticky: true
 
 ## Table of Contents
 
-1. Introduction 
-2. Method
-3. Examples
-4. References
+1. [Introduction](#1-introduction) 
+2. [Method](#2-method)
+    2.1 [Derivatives of Inner Optimization Problem](#21-derivatives-of-inner-optimization-problem)
+    2.2 [Derivatives of Outer Optimization Problem](#22-derivatives-of-outer-opitmization-problem)
+    2.3 [Derivatives of Ordinary Differential Equations](#23-derivatives-of-ordinary-differential-equations)
+3. [Examples](#3-examples)
+    3.1 [Parameter Estimation (Fully Observed States)](#31-parameter-estimation-fully-observed-states)
+    3.2 [Parameter Estimation (Partially Observed States)](#32-parameter-estimation-partially-observed-states)
+4. [Conclusion](#4-conclusion)
+5. [References](#5-references)
 
 ## 1. Introduction
 
@@ -99,7 +105,7 @@ $$
 \end{equation}
 $$
 
-where $\lambda \in \mathbb{R}^{g}$ and $ \mu \in \mathbb{R}^{h}$ are the Lagrange variables of equality and inequality constraints, respectively. The optimal solution that satisfies the above equation is given as $(p^*(\phi), \lambda ^*, \mu ^*)$. The derivative of the optimal solution with respect to $\phi$ can be efficiently calculated using the implicit function theorem [^3]. We derive equations used in forward-mode derivative calculations as follows
+where $\lambda \in \mathbb{R}^{g}$ and $ \mu \in \mathbb{R}^{h}$ are the Lagrange variables of equality and inequality constraints, respectively. The optimal solution that satisfies the above equation is given as $(p^{\ast}(\phi), \lambda ^{\ast}, \mu ^{\ast})$. The derivative of the optimal solution with respect to $\phi$ can be efficiently calculated using the implicit function theorem [^3]. We derive equations used in forward-mode derivative calculations as follows
 
 
 $$
@@ -184,7 +190,11 @@ $$
 \end{equation}
 $$
 
-Let $\hat{L}_{pp} = L_{pp} - h_p^T MH^{-1} h_p$ and $\hat{v}_1 = v_1 - h_p^T H^{-1}v_3$. Note that for equality constraint optimization problem, we get $\hat{L}_{pp} = L_{pp} $ and $\hat{v}_1 = v_1 $. We get the remaining vectors of $w$ as follows
+Let $$\hat{L}_{pp} = L_{pp} - h_p^T MH^{-1} h_p, \quad \text{and} \quad \hat{v}_1 = v_1 - h_p^T H^{-1}v_3$$ 
+
+Note that for equality constraint optimization problem, we get $$\hat{L}_{pp} = L_{pp}, \quad \text{and} \quad \hat{v}_1 = v_1 $$ 
+
+We get the remaining vectors of $w$ as follows
 
 $$
 \begin{equation}
@@ -199,7 +209,7 @@ Finally, we return the sensitivity vector $w$
 
 ### 2.2 Derivatives of Outer Opitmization Problem
 
-We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active, i.e. $h(p^* | \phi) \neq 0 $ and therefore $ \mu ^* = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
+We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active, i.e. $h(p^{\ast} | \phi) \neq 0 $ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
 
 $$
 \begin{equation}
@@ -211,11 +221,11 @@ $$
 \end{equation}
 $$
 
-Since we only require the gradient of $p^*$ with respect to $\phi$, its computation can be accelerate by storing the decomposition of the $\hat{L}_{pp}$ and $g_p \hat{L}_{pp} g_p$ during the forward pass, and reusing them when computing derivatives either using forward-mode or reverse-mode automatic differentiation. However, storing this decomposition compromises the accuracy of any higher-order derivatives of $p^*$ with respect to $\phi$. Fortunately, this is acceptable in our case, as we do not need any higher-order derivatives as shown in Equation 11. An additional advantage of reusing this decomposition, particularly in JAX, is that it makes the forward-mode equations linear in the input tangent space [^5]. As a result, a custom forward rule is sufficient for both forward- and reverse-mode automatic differentiation. This enables faster Hessian computation using the forward-over-reverse approach, compared to reverse-over-reverse mode in case when the decomposition is not reused.
+Since we only require the gradient of $p^{\ast}$ with respect to $\phi$, its computation can be accelerate by storing the decomposition of the matrix $$ \hat{L}_{pp}\quad \text{and} \quad g_p \hat{L}_{pp} g_p $$ during the forward pass, and reusing them when computing derivatives either using forward-mode or reverse-mode automatic differentiation. However, storing this decomposition compromises the accuracy of any higher-order derivatives of $p^*$ with respect to $\phi$. Fortunately, this is acceptable in our case, as we do not need any higher-order derivatives as shown in Equation 11. An additional advantage of reusing this decomposition, particularly in JAX, is that it makes the forward-mode equations linear in the input tangent space [^5]. As a result, a custom forward rule is sufficient for both forward- and reverse-mode automatic differentiation. This enables faster Hessian computation using the forward-over-reverse approach, compared to reverse-over-reverse mode in case when the decomposition is not reused.
 
 ### 2.3 Derivatives of Ordinary Differential Equations
 
-Computing derivative of $p^*$ with respect to $\phi$ also requires computing sensitivities across the differential equation solver. Using the forward-mode optimize-then-discretize differentiation approach gives
+Computing derivative of $p^{\ast}$ with respect to $\phi$ also requires computing sensitivities across the differential equation solver. Using the forward-mode optimize-then-discretize differentiation approach gives
 
 $$
 \begin{equation}
@@ -275,7 +285,7 @@ $$
 \end{equation}
 $$
 
-The linear parameters ($p$) are $ k_1 = 0.09, k_2 = 2, k_3 = 1.27, k_4 = 3.73, k_5 = 1.27, k_6 = 32.24, k_7 = 2, k_8 = 0.05, k_9 = 13.58, k_{10} = 153, k_{11} = 4.85$ and the nonlinear parameters ($\phi$) are  $Km_1 = 0.19, Km_2 = 0.73, Km_3 = 29.09, Km_4 = 2.67, Km_5 = 0.16, Km_6 = 0.05$. The initial conditions are chosen to be $x_0(0) = 0.12, x_1(0) = 0.31, x_2(0) = 0.0058, x_3(0) = 4.3$. The model is simulated from $t_i = 0$ to $t_f = 60$(sec), and measurements are collected every $0.1$ seconds. For this set of parameters, the model exhibits a limit cycle. There are in total 17 parameters (11 appear linearly and 6 appear nonlinearly) to be estimated.
+The linear parameters ($p$) are $k_1 = 0.09 $, $k_2 = 2 $, $k_3 = 1.27 $, $k_4 = 3.73 $, $k_5 = 1.27 $, $k_6 = 32.24 $, $k_7 = 2 $, $k_8 = 0.05 $, $k_9 = 13.58 $, $k_{10} = 153 $, $k_{11} = 4.85 $ and the nonlinear parameters ($\phi$) are  $Km_1 = 0.19 $, $Km_2 = 0.73 $, $Km_3 = 29.09 $, $Km_4 = 2.67 $, $Km_5 = 0.16 $, $Km_6 = 0.05 $. The initial conditions are chosen to be $x_0(0) = 0.12 $, $x_1(0) = 0.31 $, $x_2(0) = 0.0058 $, $x_3(0) = 4.3 $. The model is simulated from $t_i = 0$ to $t_f = 60$(sec), and measurements are collected every $0.1$ seconds. For this set of parameters, the model exhibits a limit cycle. There are in total 17 parameters (11 appear linearly and 6 appear nonlinearly) to be estimated.
 
 
 ```python
@@ -405,8 +415,6 @@ p, x = outer_objective_shooting(p_guess, solution, dfsindy_target)
 ```
 
 ```python
-----------------------------------------------------------------------------------------------------
-
 ******************************************************************************
 This program contains Ipopt, a library for large-scale nonlinear optimization.
 Ipopt is released as open source code under the Eclipse Public License (EPL).
@@ -492,6 +500,8 @@ Linear parameters : [8.81149634e-02 2.00281068e+00 1.27131557e+00 3.66662276e+00
 If we were to compare the estimated coefficients and their trajectories with original coefficients and their trajectories, we get the following plots
 
 <center> <img src="/assets/images/BiLevelCalciumIonCoeff.png"> </center>
+
+
 <center> <img src="/assets/images/BiLevelCalciumIonStates.png"> </center>
 
 
@@ -499,9 +509,168 @@ If we were to compare the estimated coefficients and their trajectories with ori
 
 We use the dynamics of a continuously stirred tank reactor. The dynamics consist of four differential equations given as follows
 
+$$
+\begin{equation}
+\begin{aligned}
+    \frac{dx_0}{dt} & = -\beta (t) x_0 + F_{in} ( C_{in} - x_0) \\
+    \frac{dx_1}{dt} & =  130 * \beta (t) x_0 + F_{in} (T_{in} - x_1) + U (T_c - x_1) \\
+    \beta (t) & = k_{ref} e^{- EdivR 10^4 \left( \frac{1}{x_1} - \frac{1}{T_{ref}} \right)} \\
+\end{aligned}
+\end{equation}
+$$
+
+where $x_0$ and $x_1$ are the concentration and temperature inside the reactor, $F_{in} = 1 $, $T_{in} = 323 $, and $C_{in} = 2 $ are the inlet flow rate, temperature and concentration of inlet stream. $T_c = 340 $ is the inlet temperature of the coolant used to control the temperature of the reactor, $U$ is the heat transfer coefficient, and $\beta $ is the reaction rate constant. The initial conditions are $x_0 (0) = 1.6 $ and $x_1 (0) = 340 $, which are know however only $x_1$ is measured and $x_0$ is not. Given the measurements of $x_1$ for $t_i = 0$ to $t_f = 10$(sec), and $ \Delta t = 0.1 $, we want to estimate the parameters of the model $k_{ref} = 0.461 $, $U = 5.3417 $, and $ EdivR = 0.833 $. Note that we assume that the system is identifiable with the current setting. 
+
+The idea is to treat the optimization problem corresponding to the unobserved states as a single-shooting problem (more in [this tutorial]({% post_url 2025-09-29-ParameterEstimation %})), in which all the parameters (irrespective of whether they appear linearly or not) are treated as nonlinear, while the observed states are handled in the same way as in the previous example. Consequently there 2 nonlienar parameters and 1 linear parameters. Note that Another approach, often referred to as the cascading approach to parameter estimation, involves approximating the trajectory of the unobserved state (treated here as decision variables) using an interpolation function such as a cubic spline, as demonstrated previously. However, unlike before, these parameters are no longer fixed; they now depend on the unobserved state trajectory and therefore change with each iteration of the parameter estimation process. The remainder of the problem is treated in the same way. This approach requires a differentiable cubic spline interpolation function, which is provided in [this tutorial]({% post_url 2025-09-30-CubicSpline %}). Although feasible, it tends to be computationally expensive, because of computing the Hessian with respect to all the additional interpolation parameters.
+
+```python
+def cstr(x, t, p):
+    Fin = 1 # Inflow
+    Cin = 2 # Concentration of inflow
+    Tin = 323 # Temperature of inflow
+    Tc = 340 # Inlet temperature of coolant
+    kref, U, EdivR = p # [0.461, 5.3417, 0.833]
+    b = kref * jnp.exp(- 10**4 * EdivR * (1 / x[1] - 1 / 350))
+    return jnp.array([
+        - b * x[0] + Fin * (Cin - x[0]), 
+        130 * b * x[0] + Fin * (Tin - x[1]) + U * (Tc - x[1])
+    ])
+
+xinit = jnp.array([1.6, 340])
+p_actual = jnp.array([0.461, 5.3417, 0.833])
+time_span = jnp.arange(0, 10, 0.1)
+solution = odeint_diffrax(cstr, xinit, time_span, p_actual)
+```
+
+We then define the objective function of the inner and outer optimization problems
+
+```python
+def f(p, x, states, target):
+
+    def cstr_interp(x, t, p):
+        Fin = 1 # Inflow
+        Cin = 2 # Concentration of inflow
+        Tin = 323 # Temperature of inflow
+        Tc = 340 # Temperature of coolant
+        (kref, EdivR), (U, ) = p
+
+        z = _interp(t)
+        b = kref * jnp.exp(- 10**4 * EdivR * (1 / z[1] - 1 / 350))
+        return jnp.array([
+            - b * x[0] + Fin * (Cin - x[0]), 
+            130 * b * x[0] + Fin * (Tin - z[1]) + U * (Tc - z[1])
+        ])
+
+    solution = odeint_diffrax(cstr_interp, xinit, time_span, (p.flatten(), x.flatten())) - xinit
+    return jnp.mean((solution[:, 1] - target)**2) # minimize over the temperature values only
+
+def g(p, x) : return jnp.array([ ])
+
+def simple_objective_shooting(f, g, p, states, target):
+    (x_opt, v_opt), _ = differentiable_optimization(f, g, p, x_guess, (states, target))
+    _loss = f(p, x_opt, states, target) + v_opt @ g(p, x_opt)
+    return _loss, x_opt
+
+def outer_objective_shooting(p_guess, states, target):
+    
+    _output_file = "ipopt_bilevelshootinginterp_output.txt"
+
+    # JIT compiled objective function
+    _simple_obj = jax.jit(lambda p : simple_objective_shooting(f, g, p, states, target)[0])
+    _simple_jac = jax.jit(jax.grad(_simple_obj))
+    _simple_hess = jax.jit(jax.jacfwd(_simple_jac))
+
+    def _simple_obj_error(p):
+        try :
+            sol = _simple_obj(p)
+        except : 
+            sol = jnp.inf
+        
+        return sol
+
+    solution_object = minimize_ipopt(
+        _simple_obj_error, 
+        x0 = p_guess, # restart from intial guess 
+        jac = _simple_jac,
+        hess = _simple_hess,  
+        tol = 1e-5, 
+        options = {"maxiter" : 1000, "output_file" : _output_file, "disp" : 0, "file_print_level" : 5, "mu_strategy" : "adaptive"}
+        )
+        
+    shooting_logger.info(f"{divider}")
+    with open(_output_file, "r") as file:
+        for line in file : shooting_logger.info(line.strip())
+    os.remove(_output_file)
+
+    p = jnp.array(solution_object.x)
+    return p, x.flatten()
+```
+
+```python
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+Ipopt is released as open source code under the Eclipse Public License (EPL).
+For more information visit https://github.com/coin-or/Ipopt
+******************************************************************************
+
+This is Ipopt version 3.14.4, running with linear solver MUMPS 5.2.1.
+
+Number of nonzeros in equality constraint Jacobian...:        0
+Number of nonzeros in inequality constraint Jacobian.:        0
+Number of nonzeros in Lagrangian Hessian.............:        3
+
+Total number of variables............................:        2
+variables with only lower bounds:        0
+variables with lower and upper bounds:        0
+variables with only upper bounds:        0
+Total number of equality constraints.................:        0
+Total number of inequality constraints...............:        0
+inequality constraints with only lower bounds:        0
+inequality constraints with lower and upper bounds:        0
+inequality constraints with only upper bounds:        0
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+0  1.7280182e+02 0.00e+00 1.00e+02   0.0 0.00e+00    -  0.00e+00 0.00e+00   0
+1  2.2261013e+01 0.00e+00 2.55e+01 -11.0 7.52e-01    -  1.00e+00 1.00e+00f  1
+2  1.1322034e+00 0.00e+00 4.68e+00 -11.0 2.47e-01   2.0 1.00e+00 1.00e+00f  1
+3  1.4371045e-02 0.00e+00 6.76e-01 -11.0 1.48e-01    -  1.00e+00 1.00e+00f  1
+4  3.5321911e-06 0.00e+00 8.73e-03 -11.0 1.52e-02    -  1.00e+00 1.00e+00f  1
+5  6.9815428e-09 0.00e+00 2.50e-06 -11.0 2.78e-04    -  1.00e+00 1.00e+00f  1
+
+Number of Iterations....: 5
+
+(scaled)                 (unscaled)
+Objective...............:   1.1939052466347747e-09    6.9815427997590546e-09
+Dual infeasibility......:   2.5035343383026149e-06    1.4639798411802267e-05
+Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00
+Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
+Complementarity.........:   0.0000000000000000e+00    0.0000000000000000e+00
+Overall NLP error.......:   2.5035343383026149e-06    1.4639798411802267e-05
 
 
-## 4. References
+Number of objective function evaluations             = 6
+Number of objective gradient evaluations             = 6
+Number of equality constraint evaluations            = 0
+Number of inequality constraint evaluations          = 0
+Number of equality constraint Jacobian evaluations   = 0
+Number of inequality constraint Jacobian evaluations = 0
+Number of Lagrangian Hessian evaluations             = 5
+Total seconds in IPOPT                               = 144.920
+
+EXIT: Optimal Solution Found.
+---------------------------------------------------------------------------------------------------- 
+Loss 6.981542799759055e-09
+---------------------------------------------------------------------------------------------------- 
+Nonlinear parameters : [0.46098732 0.83299782]
+---------------------------------------------------------------------------------------------------- 
+Linear parameters : [5.34155304]
+```
+
+## 4. Conclusion 
+
+We saw how a bilevel optimization, coupled with interpolation, can be used to perform parameter etimation. Because of using interpolation, this approach exploits the convexity of some parameters that appear linearly in the dynamic equation. We then test this method on both fully observed and partially observed parameter estimation problems
+
+## 5. References
 
 [^1]: [Siddharth Prabhu, Srinivas Rangarajan, and Mayuresh Kothare. Bi-level optimization for parameter estimation of differential equations using interpolation, 2025.](https://arxiv.org/abs/2506.00720)
 [^2]: [Siddharth Prabhu, Nick Kosir, Mayuresh Kothare, and Srinivas Rangarajan. Derivative-free domain-informed data-driven discovery of sparse kinetic models. Industrial & Engineering Chemistry Research, 2025](https://pubs.acs.org/doi/full/10.1021/acs.iecr.4c02981)
