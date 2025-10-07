@@ -251,6 +251,14 @@
         </li>
       {% endif %}
 
+      {% if author.gscholar %}
+        <li>
+          <a href="https://scholar.google.com/{{ author.orcid }}" itemprop="sameAs">
+            <i class="fas fa-graduation-cap" aria-hidden="true"></i> Google Scholar
+          </a>
+        </li>
+      {% endif %}
+
       {% include author-profile-custom-links.html %}
     </ul>
   </div>
