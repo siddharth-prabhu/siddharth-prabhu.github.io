@@ -207,9 +207,12 @@ $$
 
 Finally, we return the sensitivity vector $w$
 
+
 ### 2.2 Derivatives of Outer Opitmization Problem
 
-We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active $ (h(p^{\ast} | \phi) \neq 0) $ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
+
+We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active $( h(p^{\ast} | \phi) \neq 0 )$ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
+
 
 $$
 \begin{equation}
@@ -221,9 +224,10 @@ $$
 \end{equation}
 $$
 
-Since we only require the gradient of $p^{\ast}$ with respect to $\phi$, its computation can be accelerate by storing the decomposition of the matrix $$ \hat{L}_{pp}\quad \text{and} \quad g_p \hat{L}_{pp} g_p $$ during the forward pass, and reusing them when computing derivatives either using forward-mode or reverse-mode automatic differentiation. However, storing this decomposition compromises the accuracy of any higher-order derivatives of $p^*$ with respect to $\phi$. Fortunately, this is acceptable in our case, as we do not need any higher-order derivatives as shown in Equation 11. An additional advantage of reusing this decomposition, particularly in JAX, is that it makes the forward-mode equations linear in the input tangent space [^5]. As a result, a custom forward rule is sufficient for both forward- and reverse-mode automatic differentiation. This enables faster Hessian computation using the forward-over-reverse approach, compared to reverse-over-reverse mode in case when the decomposition is not reused.
+Since we only require the gradient of $p^{\ast}$ with respect to $\phi$, its computation can be accelerate by storing the decomposition of the matrix $$ \hat{L}_{pp} \ \text{and} \ g_p \hat{L}_{pp} g_p $$ during the forward pass, and reusing them when computing derivatives either using forward-mode or reverse-mode automatic differentiation. However, storing this decomposition compromises the accuracy of any higher-order derivatives of $p^*$ with respect to $\phi$. Fortunately, this is acceptable in our case, as we do not need any higher-order derivatives as shown in Equation 11. An additional advantage of reusing this decomposition, particularly in JAX, is that it makes the forward-mode equations linear in the input tangent space [^5]. As a result, a custom forward rule is sufficient for both forward- and reverse-mode automatic differentiation. This enables faster Hessian computation using the forward-over-reverse approach, compared to reverse-over-reverse mode in case when the decomposition is not reused.
 
 ### 2.3 Derivatives of Ordinary Differential Equations
+
 
 Computing derivative of $p^{\ast}$ with respect to $\phi$ also requires computing sensitivities across the differential equation solver. Using the forward-mode optimize-then-discretize differentiation approach gives
 
