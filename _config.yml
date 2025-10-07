@@ -109,7 +109,7 @@ author:
   xing             :
   youtube          : # "https://youtube.com/c/MichaelRoseDesign"
   orcid            : # "0000-0002-3684-9634"
-  links            :
+  links:
     - label: "Google Scholar"
       icon: "fas fa-graduation-cap"
       url: "https://scholar.google.com/citations?user=3LlkqCgAAAAJ&hl=en"
