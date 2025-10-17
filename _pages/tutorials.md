@@ -15,10 +15,13 @@ toc_sticky: true
   <div class="entries-list">
     {% for post in tutorials %}
       {% assign number = total | minus: forloop.index0 %}
-      {% include archive-single.html type="post" %}
+      <div class="tutorial-entry">
+        <span class="tutorial-number">{{ number }}.</span>
+        {% include archive-single.html type="post" %}
         {% if post.intro %}
             <p class="tutorial-intro">{{ post.intro }}</p>
         {% endif %}
+      </div>
     {% endfor %}
   </div>
 {% else %}
