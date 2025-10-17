@@ -210,7 +210,7 @@ Finally, we return the sensitivity vector $w$
 
 ### 2.2 Derivatives of Outer Opitmization Problem
 
-We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active $$ ( h(p^{\ast} | \phi) \neq 0 ) $$ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
+We consider the Lagrangian of the inner optimization problem as the objective of the outer optimization problem. We also assume that at the optimal solution of the inner optimization problem, none of the inequality constraints are active $h(p^{\ast} | \phi) \neq 0$ and therefore $ \mu ^{\ast} = 0$. These assumptions make the KKT point regular [^4] and simplify the computation of the gradient and Hessian of the outer objective with respect to $\phi$, as shown below
 
 
 $$
