@@ -1,5 +1,5 @@
 ---
-title: "2. Differentiable Cubic Spline Interpolation in JAX"
+title: "Differentiable Cubic Spline Interpolation in JAX"
 date: 2025-09-30
 layout: archive
 categories: [tutorials]

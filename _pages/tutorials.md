@@ -11,8 +11,10 @@ toc_sticky: true
 
 {% assign tutorials = site.categories.tutorials | sort: "date" | reverse %}
 {% if tutorials.size > 0 %}
+  {% assign total = tutorials.size %}
   <div class="entries-list">
     {% for post in tutorials %}
+      {% assign number = total | minus: forloop.index0 %}
       {% include archive-single.html type="post" %}
         {% if post.intro %}
             <p class="tutorial-intro">{{ post.intro }}</p>
