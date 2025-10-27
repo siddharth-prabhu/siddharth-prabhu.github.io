@@ -22,8 +22,8 @@ toc_sticky: true
 3. [Forward Simulation](#3-forward-simulation)
 4. [Single Shooting](#4-single-shooting)
 5. [Multiple Shooting](#5-multiple-shooting)
-5. [Orthogonal Collocation](#6-orthogonal-collocation)
-5. [References](#7-references)
+6. [Orthogonal Collocation](#6-orthogonal-collocation)
+7. [References](#7-references)
 
 
 ## 1. Parameter Estimation 
