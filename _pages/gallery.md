@@ -14,7 +14,7 @@ author_profile: true
         <a href="/assets/images/KothareGroup1.jpg">
         <figure>
             <img src="/assets/images/KothareGroup1.jpg" alt="" width="600" height="300"/>
-            <figcaption><center>Kothare Group Picture</center></figcaption>
+            <center>Kothare Group Picture</center>
         </figure>
         </a>
         </td>
@@ -22,7 +22,7 @@ author_profile: true
         <a href="/assets/images/KothareGroup2.jpg">
         <figure>
             <img src="/assets/images/KothareGroup2.jpg" alt="" width="600" height="300"/>
-            <figcaption><center>Kothare Group Picture</center></figcaption>
+            <center>Kothare Group Picture</center>
         </figure>
         </a>
         </td>
@@ -37,15 +37,15 @@ author_profile: true
         <a href="/assets/images/RangarajanGroup1.jpg">
         <figure>
             <img src="/assets/images/RangarajanGroup1.jpg" alt="" width="600" height="300"/>
-            <figcaption><center>Rangarajan Group Picture</center></figcaption>
+            <center>Rangarajan Group Picture</center>
         </figure>
         </a>
         </td>
         <td>
-        <a href="/assets/images/RangarajanGroup2.jpg">
+        <a href="/assets/images/RangarajanGroup2.JPG">
         <figure>
             <img src="/assets/images/RangarajanGroup2.JPG" alt="" width="600" height="300"/>
-            <figcaption><center>Rangarajan Group Picture</center></figcaption>
+            <center>Rangarajan Group Picture</center>
         </figure>
         </a>
         </td>
@@ -58,7 +58,7 @@ author_profile: true
 <a href="/assets/images/Symposium.jpg">
 <figure>
     <img src="/assets/images/Symposium.jpg" alt="" width="600" height="300"/>
-    <figcaption><center>Lehigh Symposium</center></figcaption>
+    <center>Lehigh Symposium</center>
 </figure>
 </a>
 </center>
