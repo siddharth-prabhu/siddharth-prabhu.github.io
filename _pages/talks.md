@@ -1,9 +1,13 @@
 ---
 title: ""
-layout: archive
+layout: single
 sitemap: true
 permalink: /talks/
 author_profile: true
+toc: true
+toc_label: "Talks"
+toc_icon: "gear"
+toc_sticky: true
 ---
 
 ## Conference Presentations
