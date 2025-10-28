@@ -9,7 +9,9 @@ author_profile: true
 
 ## About
 
-I am a Ph.D. candidate in Chemical Engineering at [Lehigh University](https://engineering.lehigh.edu/chbe), working with [Dr. Kothare](https://engineering.lehigh.edu/faculty/mayuresh-v-kothare) and [Dr. Rangarajan](https://engineering.lehigh.edu/faculty/srinivas-rangarajan). I did my Masters in Rutgers University under the supervision of [Dr Ierapetritou](https://www.mierapetritou.com/) and my undergraduate from Institute of Chemical Technology, Mumbai, India. My research lies at the intersection of dynamic process modeling, optimization and scientific machine learning. In particular, 
+I am a Ph.D. candidate in Chemical Engineering at [Lehigh University](https://engineering.lehigh.edu/chbe), working with [Dr. Kothare](https://engineering.lehigh.edu/faculty/mayuresh-v-kothare) and [Dr. Rangarajan](https://engineering.lehigh.edu/faculty/srinivas-rangarajan). I completed my Master's degree at Rutgers University under the guidance of [Dr Ierapetritou](https://www.mierapetritou.com/) and my undergraduate studies at the Institute of Chemical Technology (ICT), Mumbai, India. 
+
+My research lies at the intersection of dynamic process modeling, optimization and scientific machine learning. In particular, 
 
 - Constrained Nonlinear Optimization
 - Parameter estimation of ordinary (partial) differential equations
@@ -25,9 +27,7 @@ Outside of research, I enjoy reading (including manga), investing, and hiking.
 
 <br>
 
-<center>
-<img src="/assets/images/ResearchContributions.png" height=400 width=800>
-</center>
+<center><a href="/assets/images/ResearchContributions.png"><img src="/assets/images/ResearchContributions.png" height="400" width="800"></a></center>
 
 <br>
 
