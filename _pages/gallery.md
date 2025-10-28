@@ -22,7 +22,7 @@ author_profile: true
         <a href="/assets/images/KothareGroup2.jpg">
         <figure>
             <img src="/assets/images/KothareGroup2.jpg" alt="" width="600" height="300"/>
-            <center><figcaption><center>Kothare Group Picture</center></figcaption>
+            <figcaption><center>Kothare Group Picture</center></figcaption>
         </figure>
         </a>
         </td>
