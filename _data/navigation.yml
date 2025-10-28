@@ -8,5 +8,7 @@ main:
     url: /tutorials/
   - title: "Talks"
     url: /talks/
+  - title: "Pictures"
+    url: /gallery/
   - title: "CV" 
     url: /CV/
