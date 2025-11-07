@@ -63,3 +63,25 @@ author_profile: true
 </a>
 </center>
 
+<center>
+<table>
+    <tr>
+        <td>
+        <a href="/assets/images/AIChE2025.jpeg">
+        <figure>
+            <img src="/assets/images/AIChE2025.jpeg" alt="" width="600" height="300"/>
+            <center>Rangarajan Group Picture</center>
+        </figure>
+        </a>
+        </td>
+        <td>
+        <a href="/assets/images/AIChE2025Poster.jpeg">
+        <figure>
+            <img src="/assets/images/AIChE2025Poster.jpeg" alt="" width="600" height="300"/>
+            <center>Rangarajan Group Picture</center>
+        </figure>
+        </a>
+        </td>
+    </tr>
+</table>
+</center>

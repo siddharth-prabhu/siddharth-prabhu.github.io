@@ -15,6 +15,7 @@ toc_sticky: true
 - **Siddharth Prabhu**, Srinivas Rangarajan, and Mayuresh Kothare. An Event-Based Neural Partial Differential Equation Model of Heat and Mass Transport in an Industrial Drying Oven. AIChE Annual Meeting, Boston, MA, 2025.
 
 
+<center> <iframe src="https://drive.google.com/file/d/1yVnhGPmWjTp01pUuEtSuftPan1ahxISI/preview" width="640" height="480" allow="autoplay"></iframe> </center>
 
 - **Siddharth Prabhu**, Srinivas Rangarajan, and Mayuresh Kothare. Differential Dynamic Programming with Stagewise Equality and Inequality Constraints Using Interior Point Method. ACC, Denver, CO, 2025.
 
