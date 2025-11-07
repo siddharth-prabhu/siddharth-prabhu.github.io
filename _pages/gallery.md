@@ -70,7 +70,7 @@ author_profile: true
         <a href="/assets/images/AIChE2025.jpeg">
         <figure>
             <img src="/assets/images/AIChE2025.jpeg" alt="" width="600" height="300"/>
-            <center>Rangarajan Group Picture</center>
+            <center>Rangarajan Group Picture at AIChE 2025</center>
         </figure>
         </a>
         </td>
@@ -78,7 +78,7 @@ author_profile: true
         <a href="/assets/images/AIChE2025Poster.jpeg">
         <figure>
             <img src="/assets/images/AIChE2025Poster.jpeg" alt="" width="600" height="300"/>
-            <center>Rangarajan Group Picture</center>
+            <center>Poster Presentation at AIChE 2025</center>
         </figure>
         </a>
         </td>
