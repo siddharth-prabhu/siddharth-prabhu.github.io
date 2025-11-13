@@ -225,7 +225,6 @@ and requires the following Newton step
 
 $$
 \begin{equation}
-\resizebox{.9\hsize}{!}{$
 \begin{aligned}
     \begin{bmatrix}
         l_{zz} + \lambda ^T g_{zz} + \tau S^{-1} h_{zz} + f_z^TV_{zz}f_z + V_z f & g_z ^T & h_z ^ T S^{-2} \tau\\
@@ -240,8 +239,7 @@ $$
         g \\
         h + s
     \end{bmatrix}
-\end{aligned}%
-}
+\end{aligned}
 \end{equation}
 $$
 
