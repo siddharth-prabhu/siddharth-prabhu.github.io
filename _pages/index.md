@@ -6,6 +6,7 @@ permalink: /
 author_profile: true
 ---
 
+<img src="/assets/images/DefenseSolo.jpg" width="340px" alt="Siddharth Prabhu" align="right" style="margin-left: 40px; margin-bottom: 10px;" />
 
 ## About
 

@@ -6,6 +6,15 @@ permalink: /gallery/
 author_profile: true
 ---
 
+<center>
+<a href="/assets/images/Defense.jpg">
+<figure>
+    <img src="/assets/images/Defense.jpg" alt="" width="600" height="300"/>
+    <center>PhD Defense Presentation</center>
+</figure>
+</a>
+</center>
+
 
 <center>
 <table>
