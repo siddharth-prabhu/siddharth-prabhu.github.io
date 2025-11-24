@@ -80,7 +80,7 @@ analytics:
 # Site Author
 author:
   name             : "Siddharth Prabhu"
-  avatar           : "/assets/images/avatar2.JPG" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/avatar.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "Parameter Estimation, Optimal Control, Machine Learning, Optimization, Automatic Differentiation, System Identification"
   location         : "Bethlehem, Pennsylvania"
   email            : "siddharth.prabhu15@gmail.com"

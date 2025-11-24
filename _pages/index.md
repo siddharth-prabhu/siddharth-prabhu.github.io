@@ -6,9 +6,10 @@ permalink: /
 author_profile: true
 ---
 
-<img src="/assets/images/DefenseSolo.jpg" width="340px" alt="Siddharth Prabhu" align="right" style="margin-left: 40px; margin-bottom: 10px;" />
 
 ## About
+
+<img src="/assets/images/DefenseSolo.jpg" width="340px" alt="Siddharth Prabhu" align="right" style="margin-left: 40px; margin-bottom: 10px;" />
 
 I am a Ph.D. candidate in Chemical Engineering at [Lehigh University](https://engineering.lehigh.edu/chbe), working with [Dr. Kothare](https://engineering.lehigh.edu/faculty/mayuresh-v-kothare) and [Dr. Rangarajan](https://engineering.lehigh.edu/faculty/srinivas-rangarajan). I completed my Master's degree at Rutgers University under the guidance of [Dr Ierapetritou](https://www.mierapetritou.com/) and my undergraduate studies at the Institute of Chemical Technology (ICT), Mumbai, India. 
 
