@@ -7,12 +7,26 @@ author_profile: true
 ---
 
 <center>
-<a href="/assets/images/Defense.jpg">
-<figure>
-    <img src="/assets/images/Defense.jpg" alt="" width="600" height="300"/>
-    <center>PhD Defense Presentation</center>
-</figure>
-</a>
+<table>
+    <tr>
+        <td>
+        <a href="/assets/images/Defense.jpg">
+        <figure>
+            <img src="/assets/images/Defense.jpg" alt="" width="600" height="300"/>
+            <center>PhD Defense Presentation</center>
+        </figure>
+        </a>
+        </td>
+        <td>
+        <a href="/assets/images/PostDefense.jpg">
+        <figure>
+            <img src="/assets/images/PostDefense.jpg" alt="" width="200" height="300"/>
+            <center>Post Defense Picture</center>
+        </figure>
+        </a>
+        </td>
+    </tr>
+</table>
 </center>
 
 
